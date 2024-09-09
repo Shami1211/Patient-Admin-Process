@@ -6,9 +6,7 @@ const cors = require("cors");
 const app = express(); 
 
 //Link Routs
-const AppointmentRoute = require("./Routes/AppointmentRoutes.js");
-const ClinicRoute = require("./Routes/ClinicRoutes.js");
-const DoctorRoute = require("./Routes/DoctorRoutes.js");
+const AdmitRoute = require("./Routes/AdmitRoutes.js");
 
 dotenv.config();
 connectDB();
@@ -16,9 +14,8 @@ app.use(cors());
 app.use(express.json());
 
 //Routes
-app.use("/appointment", AppointmentRoute);
-app.use("/clinic", ClinicRoute);
-app.use("/doctor", DoctorRoute);
+app.use("/admit",AdmitRoute);
+
 
 const PORT = process.env.PORT || 8081;
 

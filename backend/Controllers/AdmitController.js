@@ -1,142 +1,155 @@
-const DentalModel = require("../Model/AppointmentModel");
+const AdmitModel = require("../Model/AdmitModel");
 
-//Display Data
-const getAllDentalDetails = async (req, res, next) => {
-  let dental;
+// Display Data
+const getAllAdmitDetails = async (req, res, next) => {
+  let admit;
   try {
-    dental = await DentalModel.find();
+    admit = await AdmitModel.find();
   } catch (err) {
     console.log(err); 
   }
-  if (!dental) {
+  if (!admit) {
     return res.status(404).json({ message: "Data not found" });
   }
-  return res.status(200).json({ dental });
+  return res.status(200).json({ admit });
 };
 
-//Insert Data
+// Insert Data
 const addData = async (req, res, next) => {
   const {
-    fullname,
-    appointmentID,
-    phone,
-    email,
-    service,
-    clinic,
-    doctor,
+    hospital,
     date,
-    timeSlotStart,
-    timeSlotEnd,
-    appointmentStatus,
-    doctorID,
+    rooms,
+    fullname,
+    dob,
+    gender,
+    phone,
+    address,
+    guardian,
+    relationship,
+    contact,
+    medications,
+    past,
+    symptoms,
+    prescription,
   } = req.body;
 
-  let dental;
+  let admit;
 
   try {
-    dental = new DentalModel({
-      fullname,
-      appointmentID,
-      phone,
-      email,
-      service,
-      clinic,
-      doctor,
+    admit = new AdmitModel({
+      hospital,
       date,
-      timeSlotStart,
-      timeSlotEnd,
-      appointmentStatus,
-      doctorID,
+      rooms,
+      fullname,
+      dob,
+      gender,
+      phone,
+      address,
+      guardian,
+      relationship,
+      contact,
+      medications,
+      past,
+      symptoms,
+      prescription,
     });
-    await dental.save();
+    await admit.save();
   } catch (err) {
     console.log(err);
   }
-  if (!dental) {
-    return res.status(404).json({ message: "unable to add data" });
+  if (!admit) {
+    return res.status(404).json({ message: "Unable to add data" });
   }
-  return res.status(200).json({ dental });
+  return res.status(200).json({ admit });
 };
 
-//Get by Id
+// Get by Id
 const getById = async (req, res, next) => {
   const id = req.params.id;
-  let dental;
+  let admit;
   try {
-    dental = await DentalModel.findById(id);
+    admit = await AdmitModel.findById(id);
   } catch (err) {
     console.log(err);
   }
-  if (!dental) {
-    return res.status(404).json({ message: "Data Not Found" });
+  if (!admit) {
+    return res.status(404).json({ message: "Data not found" });
   }
-  return res.status(200).json({ dental });
+  return res.status(200).json({ admit });
 };
 
-//Update Details
-const updateDentalData = async (req, res, next) => {
+// Update Details
+const updateAdmitData = async (req, res, next) => {
   const id = req.params.id;
   const {
-    fullname,
-    appointmentID,
-    phone,
-    email,
-    service,
-    clinic,
-    doctor,
+    hospital,
     date,
-    timeSlotStart,
-    timeSlotEnd,
-    appointmentStatus,
-    doctorID,
+    rooms,
+    fullname,
+    dob,
+    gender,
+    phone,
+    address,
+    guardian,
+    relationship,
+    contact,
+    medications,
+    past,
+    symptoms,
+    prescription,
   } = req.body;
 
-  let dental;
+  let admit;
 
   try {
-    dental = await DentalModel.findByIdAndUpdate(id, {
-      fullname: fullname,
-      appointmentID: appointmentID,
-      phone: phone,
-      email: email,
-      service: service,
-      clinic: clinic,
-      doctor: doctor,
-      date: date,
-      timeSlotStart:timeSlotStart,
-      timeSlotEnd:timeSlotEnd,
-      appointmentStatus: appointmentStatus,
-      doctorID:doctorID,
+    admit = await AdmitModel.findByIdAndUpdate(id, {
+      hospital,
+      date,
+      rooms,
+      fullname,
+      dob,
+      gender,
+      phone,
+      address,
+      guardian,
+      relationship,
+      contact,
+      medications,
+      past,
+      symptoms,
+      prescription,
     });
-    dental = await dental.save();
-  } catch (err) { 
-    console.log(err);
-  }
-  if (!dental) {
-    return res.status(404).json({ message: "Unable to Update data" });
-  }
-  return res.status(200).json({ dental });
-};
-
-//Delete data
-const deleteDentalData = async (req, res, next) => {
-  const id = req.params.id;
-
-  let dental;
-
-  try {
-    dental = await DentalModel.findByIdAndDelete(id);
+    admit = await admit.save();
   } catch (err) {
     console.log(err);
   }
-  if (!dental) {
-    return res.status(404).json({ message: "Unable to Delete Details" });
+  if (!admit) {
+    return res.status(404).json({ message: "Unable to update data" });
   }
-  return res.status(200).json({ dental });
+  return res.status(200).json({ admit });
 };
 
-exports.getAllDentalDetails = getAllDentalDetails;
+// Delete Data
+const deleteAdmitData = async (req, res, next) => {
+  const id = req.params.id;
+
+  let admit;
+
+  try {
+    admit = await AdmitModel.findByIdAndDelete(id);
+  } catch (err) {
+    console.log(err);
+  }
+  if (!admit) {
+    return res.status(404).json({ message: "Unable to delete details" });
+  }
+  return res.status(200).json({ admit });
+};
+
+exports.getAllAdmitDetails = getAllAdmitDetails;
 exports.addData = addData;
 exports.getById = getById;
-exports.updateDentalData = updateDentalData;
-exports.deleteDentalData = deleteDentalData;
+exports.updateAdmitData = updateAdmitData;
+exports.deleteAdmitData = deleteAdmitData;
+   

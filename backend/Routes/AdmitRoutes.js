@@ -1,12 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const DentalController = require("../Controllers/AppointmentController");
+const AdmitController = require("../Controllers/AdmitController");
 
-router.get("/", DentalController.getAllDentalDetails);
-router.post("/", DentalController.addData);
-router.get("/:id", DentalController.getById);
-router.put("/:id", DentalController.updateDentalData);
-router.delete("/:id", DentalController.deleteDentalData);
+router.get("/", AdmitController.getAllAdmitDetails);
+router.post("/", AdmitController.addData);
+router.get("/:id", AdmitController.getById);
+router.put("/:id", AdmitController.updateAdmitData);
+router.delete("/:id", AdmitController.deleteAdmitData);
 
-//export
 module.exports = router;

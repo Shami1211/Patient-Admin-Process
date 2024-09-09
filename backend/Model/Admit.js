@@ -2,32 +2,8 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const AppointmentSchema = new Schema({
-  fullname: {
-    type: String,
-    required: true,
-  },
-  appointmentID: {
-    type: String,
-    required: true,
-  },
-  phone: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-  service: {
-    type: String,
-    required: true,
-  },
-  clinic: {
-    type: String,
-    required: true,
-  },
-  doctor: {
+const AdmitSchema = new Schema({
+  hospital: {
     type: String,
     required: true,
   },
@@ -35,21 +11,54 @@ const AppointmentSchema = new Schema({
     type: String,
     required: true,
   },
-  timeSlotStart: {
+  rooms: {
     type: String,
     required: true,
   },
-  timeSlotEnd: {
+  fullname: {
     type: String,
     required: true,
   },
-  appointmentStatus: {
-    type: String,
-  },
-  doctorID: {
+  dob: {
     type: String,
     required: true,
+  },
+  gender: {
+    type: String,
+    required: true,
+  },
+  phone: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  guardian: {
+    type: String,
+    required: true,
+  },
+  relationship: {
+    type: String,
+    required: true,
+  },
+  contact: {
+    type: String,
+    required: true,
+  },
+  medications: {
+    type: String,
+  },
+  past: {
+    type: String,
+  },
+  symptoms: {
+    type: String,
+  },
+  prescription: {
+    type: String,
   },
 });
 
-module.exports = mongoose.model("Appointment", AppointmentSchema);
+module.exports = mongoose.model("Admit", AdmitSchema);
