@@ -7,6 +7,7 @@ const app = express();
 app.use(cors({ origin: "http://localhost:5173" }));
 
 
+
 //Link Routs
 const admitRoutes = require("./Routes/AdmitRoutes.js");
 
@@ -17,6 +18,7 @@ app.use(express.json());
 
 //Routes
 app.use('/admit', admitRoutes);
+
 
 
 

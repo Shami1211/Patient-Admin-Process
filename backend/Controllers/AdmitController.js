@@ -140,6 +140,7 @@ const admitCount = async (req, res) => {
   }
 };
 
+
 exports.getAllAdmitDetails = getAllAdmitDetails;
 exports.addData = addData;
 exports.getById = getById;

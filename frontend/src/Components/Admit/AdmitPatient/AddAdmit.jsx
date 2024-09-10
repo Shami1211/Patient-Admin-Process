@@ -17,6 +17,10 @@ function AddAdmit() {
     relationship: "",
     contact: "",
     admitID: "",
+    medications: "", // Added new fields
+    past: "",
+    symptoms: "",
+    prescription: "",
   });
   const [hospitals, setHospitals] = useState([]);
   const [admitCount, setAdmitCount] = useState(0);
@@ -37,7 +41,7 @@ function AddAdmit() {
         { _id: "2", hospitalname: "Medical Center" },
         { _id: "3", hospitalname: "Health Clinic" },
         { _id: "4", hospitalname: "Community Hospital" },
-        { _id: "5", hospitalname: "Central Hospital" }
+        { _id: "5", hospitalname: "Central Hospital" },
       ];
       setHospitals(mockHospitals);
       setInputs((prevInputs) => ({
@@ -60,12 +64,11 @@ function AddAdmit() {
   const checkAvailability = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8081/admitCount?hospital=${inputs.hospital}&date=${inputs.date}`
+        `http://localhost:8081/admit/admitCount?hospital=${inputs.hospital}&date=${inputs.date}`
       );
-      
       const count = response.data.count;
       setAdmitCount(count);
-  
+
       if (count >= maxAdmits) {
         alert("Hospital has reached the maximum admit capacity for the day.");
       } else {
@@ -73,16 +76,15 @@ function AddAdmit() {
       }
     } catch (error) {
       console.error("Error checking availability", error);
-      // Optional: Display a user-friendly message or handle specific error cases
     }
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await sendRequest();
       alert("Admit Added successfully!");
-      setSection(3); // Proceed to the final section
+      setSection(4); // Proceed to the final section
     } catch (error) {
       console.error("Error adding admit", error);
     }
@@ -101,6 +103,10 @@ function AddAdmit() {
       relationship: inputs.relationship,
       contact: inputs.contact,
       admitID: inputs.admitID,
+      medications: inputs.medications, // Added new fields
+      past: inputs.past,
+      symptoms: inputs.symptoms,
+      prescription: inputs.prescription,
     });
   };
 
@@ -155,7 +161,7 @@ function AddAdmit() {
             {section === 2 && (
               <>
                 <h1 className="form_head_admit">Enter Patient Details</h1>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={(e) => e.preventDefault()}>
                   <div className="input_group">
                     <div className="form-group">
                       <label htmlFor="fullname">Full Name:</label>
@@ -264,23 +270,77 @@ function AddAdmit() {
                       required
                     />
                   </div>
-                  <button type="submit" className="submit_btn">
-                    Save Patient Details
+                  <button type="button" className="submit_btn" onClick={() => setSection(3)}>
+                    Next: Medical Information
                   </button>
                 </form>
               </>
             )}
 
             {section === 3 && (
-              <div className="final-section">
-                <h1>Admit Process Completed!</h1>
-                <p>Your admit details have been saved successfully.</p>
-                <button
-                  className="submit_btn"
-                  onClick={() => navigate("/admitSummary", { state: { admitData: inputs } })}
-                >
-                  View Admit Summary
-                </button>
+              <>
+                <h1 className="form_head_admit">Enter Medical Information</h1>
+                <form onSubmit={handleSubmit}>
+                  <div className="input_group">
+                    <div className="form-group">
+                      <label htmlFor="medications">Medications:</label>
+                      <input
+                        type="text"
+                        id="medications"
+                        name="medications"
+                        className="form-input"
+                        value={inputs.medications}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="past">Past Medical History:</label>
+                      <textarea
+                        id="past"
+                        name="past"
+                        className="form-input"
+                        value={inputs.past}
+                        onChange={handleChange}
+                        required
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div className="input_group">
+                    <div className="form-group">
+                      <label htmlFor="symptoms">Symptoms:</label>
+                      <textarea
+                        id="symptoms"
+                        name="symptoms"
+                        className="form-input"
+                        value={inputs.symptoms}
+                        onChange={handleChange}
+                        required
+                      ></textarea>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="prescription">Prescription:</label>
+                      <textarea
+                        id="prescription"
+                        name="prescription"
+                        className="form-input"
+                        value={inputs.prescription}
+                        onChange={handleChange}
+                        required
+                      ></textarea>
+                    </div>
+                  </div>
+                  <button type="submit" className="submit_btn">
+                    Submit Admit Details
+                  </button>
+                </form>
+              </>
+            )}
+
+            {section === 4 && (
+              <div className="submit_section">
+                <h1>Admit Successfully Submitted!</h1>
+                <button onClick={() => navigate("/")}>Return Home</button>
               </div>
             )}
           </div>
