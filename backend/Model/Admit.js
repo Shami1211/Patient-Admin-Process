@@ -11,10 +11,6 @@ const AdmitSchema = new Schema({
     type: String,
     required: true,
   },
-  rooms: {
-    type: String,
-    required: true,
-  },
   fullname: {
     type: String,
     required: true,

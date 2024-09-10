@@ -1,83 +1,53 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
-import "./DentalUser.css";
-import DentalNav from "../Home/DentalNav";
-function AddAppointment() {
-  const navigate = useNavigate();
-  const [inputs, setInputs] = useState({
-    fullname: "",
-    appointmentID: "",
-    phone: "",
-    email: "",
-    service: "",
-    clinic: "",
-    doctor: "",
-    date: "",
-    timeSlotStart: "",
-    timeSlotEnd: "",
-    doctorID: "",
-  });
-  const [clinics, setClinics] = useState([]);
-  const [doctors, setDoctors] = useState([]);
-  const [filteredDoctors, setFilteredDoctors] = useState([]);
 
-  const generateAppointmentID = () => {
-    const prefix = "AP";
+function AddAdmit() {
+  const navigate = useNavigate();
+  const [section, setSection] = useState(1); // Controls the form sections
+  const [inputs, setInputs] = useState({
+    hospital: "",
+    date: "",
+    fullname: "",
+    dob: "",
+    gender: "",
+    phone: "",
+    address: "",
+    guardian: "",
+    relationship: "",
+    contact: "",
+    admitID: "",
+  });
+  const [hospitals, setHospitals] = useState([]);
+  const [admitCount, setAdmitCount] = useState(0);
+  const maxAdmits = 20; // Maximum allowed admits per hospital per day
+
+  const generateAdmitID = () => {
+    const prefix = "AD";
     const randomNumber = Math.floor(100000000 + Math.random() * 900000000);
     return `${prefix}${randomNumber}`;
   };
 
   useEffect(() => {
-    // Fetch clinics and doctors on component mount
-    const fetchClinicsAndDoctors = async () => {
-      try {
-        const clinicResponse = await axios.get("http://localhost:8081/clinic");
-        setClinics(clinicResponse.data.clinic);
-
-        const doctorResponse = await axios.get("http://localhost:8081/doctor");
-        setDoctors(doctorResponse.data.doctor);
-      } catch (error) {
-        console.error("Error fetching data", error);
-      }
+    // Fetch hospitals on component mount
+    const fetchHospitals = async () => {
+      // Mock data
+      const mockHospitals = [
+        { _id: "1", hospitalname: "City Hospital" },
+        { _id: "2", hospitalname: "Medical Center" },
+        { _id: "3", hospitalname: "Health Clinic" },
+        { _id: "4", hospitalname: "Community Hospital" },
+        { _id: "5", hospitalname: "Central Hospital" }
+      ];
+      setHospitals(mockHospitals);
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        admitID: generateAdmitID(),
+      }));
     };
 
-    fetchClinicsAndDoctors();
-    setInputs((prevInputs) => ({
-      ...prevInputs,
-      appointmentID: generateAppointmentID(),
-    }));
+    fetchHospitals();
   }, []);
-
-  useEffect(() => {
-    // Filter doctors based on selected clinic
-    if (inputs.clinic) {
-      const filtered = doctors.filter(
-        (doctor) => doctor.clinic === inputs.clinic
-      );
-      setFilteredDoctors(filtered);
-    } else {
-      setFilteredDoctors([]);
-    }
-  }, [inputs.clinic, doctors]);
-
-  useEffect(() => {
-    // Update time slots based on selected doctor
-    if (inputs.doctor) {
-      const selectedDoctor = doctors.find(
-        (doctor) => doctor.doctorName === inputs.doctor
-      );
-      if (selectedDoctor) {
-        setInputs((prevInputs) => ({
-          ...prevInputs,
-          timeSlotStart: selectedDoctor.timeSlotStart,
-          timeSlotEnd: selectedDoctor.timeSlotEnd,
-          date: selectedDoctor.date,
-          doctorID: selectedDoctor.doctorID,
-        }));
-      }
-    }
-  }, [inputs.doctor, doctors]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -87,229 +57,232 @@ function AddAppointment() {
     }));
   };
 
+  const checkAvailability = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8081/admitCount?hospital=${inputs.hospital}&date=${inputs.date}`
+      );
+      
+      const count = response.data.count;
+      setAdmitCount(count);
+  
+      if (count >= maxAdmits) {
+        alert("Hospital has reached the maximum admit capacity for the day.");
+      } else {
+        setSection(2); // Proceed to the next section if availability is confirmed
+      }
+    } catch (error) {
+      console.error("Error checking availability", error);
+      // Optional: Display a user-friendly message or handle specific error cases
+    }
+  };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(inputs);
-    await sendRequest();
-    window.alert("Appointment Added successfully!");
-    navigate("/appointmentsummary", { state: { appointmentData: inputs } });
+    try {
+      await sendRequest();
+      alert("Admit Added successfully!");
+      setSection(3); // Proceed to the final section
+    } catch (error) {
+      console.error("Error adding admit", error);
+    }
   };
 
   const sendRequest = async () => {
-    await axios.post("http://localhost:8081/appointment", {
-      fullname: inputs.fullname,
-      appointmentID: inputs.appointmentID,
-      phone: inputs.phone,
-      email: inputs.email,
-      service: inputs.service,
-      clinic: inputs.clinic,
-      doctor: inputs.doctor,
+    await axios.post("http://localhost:8081/admit", {
+      hospital: inputs.hospital,
       date: inputs.date,
-      timeSlotStart: inputs.timeSlotStart,
-      timeSlotEnd: inputs.timeSlotEnd,
-      doctorID: inputs.doctorID,
+      fullname: inputs.fullname,
+      dob: inputs.dob,
+      gender: inputs.gender,
+      phone: inputs.phone,
+      address: inputs.address,
+      guardian: inputs.guardian,
+      relationship: inputs.relationship,
+      contact: inputs.contact,
+      admitID: inputs.admitID,
     });
   };
 
   return (
     <div>
-      <div className="dental_from_background">
-        <DentalNav />
-        <div className="form_full_dental">
-          <div className="appointment_from_full">
-            <h1 className="form_head_dental">Schedule your Appointment </h1>
-            <p className="from_para_dental">
-              Get your Dental Health back on track with us
-            </p>
-            <form className="appointment-form" onSubmit={handleSubmit}>
-              <div className="input_group">
-                <div className="form-group">
-                  <label className="form-label" htmlFor="fullname">
-                    Full Name:
-                  </label>
-                  <br />
-                  <input
-                    type="text"
-                    id="fullname"
-                    name="fullname"
-                    className="form-input"
-                    value={inputs.fullname}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="appointmentID">
-                    Appointment ID:
-                  </label>
-                  <br />
-                  <input
-                    type="text"
-                    id="appointmentID"
-                    name="appointmentID"
-                    className="form-input"
-                    value={inputs.appointmentID}
-                    readOnly
-                    required
-                  />
-                </div>
-              </div>
-              <div className="input_group">
-                <div className="form-group">
-                  <label className="form-label" htmlFor="phone">
-                    Phone:
-                  </label>
-                  <br />
-                  <input
-                    type="text"
-                    id="phone"
-                    pattern="[0-9]{10}"
-                    name="phone"
-                    className="form-input"
-                    value={inputs.phone}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="email">
-                    Email:
-                  </label>
-                  <br />
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    className="form-input"
-                    value={inputs.email}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="form-group">
-                <label className="form-label" htmlFor="service">
-                  Service:
-                </label>
-                <br />
-                <select
-                  id="service"
-                  name="service"
-                  className="form_input_service"  
-                  value={inputs.service}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select a Service</option>
-                  <option value="Routing check-ups and Cleaning">
-                    Routing check-ups and Cleaning
-                  </option>
-                  <option value="Teeth Whitening">Teeth Whitening</option>
-                  <option value="Cosmetic Dentistry">Cosmetic Dentistry</option>
-                  <option value="Braces">Braces</option>
-                  <option value="Root Canal Therapy">Root Canal Therapy</option>
-                  <option value="Wisdom Teeth Removal">
-                    Wisdom Teeth Removal
-                  </option>
-                </select>
-              </div>
-              <div className="input_group">
-                <div className="form-group">
-                  <label className="form-label" htmlFor="clinic">
-                    Clinic:
-                  </label>
-                  <br />
-                  <select
-                    id="clinic"
-                    name="clinic"
-                    className="form-input"
-                    value={inputs.clinic}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Select Clinic</option>
-                    {clinics.map((clinic) => (
-                      <option key={clinic._id} value={clinic.clinicname}>
-                        {clinic.clinicname}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="doctor">
-                    Doctor:
-                  </label>
-                  <br />
-                  <select
-                    id="doctor"
-                    name="doctor"
-                    className="form-input"
-                    value={inputs.doctor}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Select Doctor</option>
-                    {filteredDoctors.length > 0 ? (
-                      filteredDoctors.map((doctor) => (
-                        <option key={doctor._id} value={doctor.doctorName}>
-                          {doctor.doctorName}
-                        </option>
-                      ))
-                    ) : (
-                      <option value="">
-                        No doctors available for selected clinic
-                      </option>
-                    )}
-                  </select>
-                </div>
-              </div>
-              <div className="input_group">
-                <div className="form-group">
-                  <label className="form-label" htmlFor="date">
-                    Date:
-                  </label>
-                  <br />
-                  <input
-                    type="date"
-                    id="date"
-                    name="date"
-                    className="form-input"
-                    value={inputs.date}
-                    onChange={handleChange}
-                    readOnly
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="timeSlotStart">
-                    Your Time Slot:
-                  </label>
+      <div className="admit_form_background">
+        <div className="form_full_admit">
+          <div className="admit_form_full">
+            {section === 1 && (
+              <>
+                <h1 className="form_head_admit">Check Hospital Availability</h1>
+                <form onSubmit={(e) => e.preventDefault()}>
                   <div className="input_group">
+                    <div className="form-group">
+                      <label htmlFor="hospital">Select Hospital:</label>
+                      <select
+                        id="hospital"
+                        name="hospital"
+                        className="form-input"
+                        value={inputs.hospital}
+                        onChange={handleChange}
+                        required
+                      >
+                        <option value="">Select Hospital</option>
+                        {hospitals.map((hospital) => (
+                          <option key={hospital._id} value={hospital.hospitalname}>
+                            {hospital.hospitalname}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="date">Select Date:</label>
+                      <input
+                        type="date"
+                        id="date"
+                        name="date"
+                        className="form-input"
+                        value={inputs.date}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <button type="button" className="submit_btn" onClick={checkAvailability}>
+                    Check Availability
+                  </button>
+                </form>
+              </>
+            )}
+
+            {section === 2 && (
+              <>
+                <h1 className="form_head_admit">Enter Patient Details</h1>
+                <form onSubmit={handleSubmit}>
+                  <div className="input_group">
+                    <div className="form-group">
+                      <label htmlFor="fullname">Full Name:</label>
+                      <input
+                        type="text"
+                        id="fullname"
+                        name="fullname"
+                        className="form-input"
+                        value={inputs.fullname}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="dob">Date of Birth:</label>
+                      <input
+                        type="date"
+                        id="dob"
+                        name="dob"
+                        className="form-input"
+                        value={inputs.dob}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="input_group">
+                    <div className="form-group">
+                      <label htmlFor="gender">Gender:</label>
+                      <select
+                        id="gender"
+                        name="gender"
+                        className="form-input"
+                        value={inputs.gender}
+                        onChange={handleChange}
+                        required
+                      >
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="phone">Phone:</label>
+                      <input
+                        type="text"
+                        id="phone"
+                        pattern="[0-9]{10}"
+                        name="phone"
+                        className="form-input"
+                        value={inputs.phone}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="address">Address:</label>
                     <input
-                      type="time"
-                      id="timeSlotStart"
-                      name="timeSlotStart"
-                      className="forminput"
-                      value={inputs.timeSlotStart}
+                      type="text"
+                      id="address"
+                      name="address"
+                      className="form-input"
+                      value={inputs.address}
                       onChange={handleChange}
-                      readOnly
-                    />
-                    <span className="sub_date_titel">To</span>
-                    <input
-                      type="time"
-                      id="timeSlotEnd"
-                      name="timeSlotEnd"
-                      className="forminput"
-                      value={inputs.timeSlotEnd}
-                      onChange={handleChange}
-                      readOnly
+                      required
                     />
                   </div>
-                </div>
+                  <div className="input_group">
+                    <div className="form-group">
+                      <label htmlFor="guardian">Guardian Name:</label>
+                      <input
+                        type="text"
+                        id="guardian"
+                        name="guardian"
+                        className="form-input"
+                        value={inputs.guardian}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="relationship">Relationship:</label>
+                      <input
+                        type="text"
+                        id="relationship"
+                        name="relationship"
+                        className="form-input"
+                        value={inputs.relationship}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="contact">Emergency Contact:</label>
+                    <input
+                      type="text"
+                      id="contact"
+                      pattern="[0-9]{10}"
+                      name="contact"
+                      className="form-input"
+                      value={inputs.contact}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <button type="submit" className="submit_btn">
+                    Save Patient Details
+                  </button>
+                </form>
+              </>
+            )}
+
+            {section === 3 && (
+              <div className="final-section">
+                <h1>Admit Process Completed!</h1>
+                <p>Your admit details have been saved successfully.</p>
+                <button
+                  className="submit_btn"
+                  onClick={() => navigate("/admitSummary", { state: { admitData: inputs } })}
+                >
+                  View Admit Summary
+                </button>
               </div>
-              <button type="submit" className="submit_btn">
-                Confirm Booking
-              </button>
-            </form>
+            )}
           </div>
         </div>
       </div>
@@ -317,4 +290,4 @@ function AddAppointment() {
   );
 }
 
-export default AddAppointment;
+export default AddAdmit;

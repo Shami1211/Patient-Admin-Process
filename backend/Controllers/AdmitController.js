@@ -1,4 +1,4 @@
-const AdmitModel = require("../Model/AdmitModel");
+const AdmitModel = require("../Model/Admit");
 
 // Display Data
 const getAllAdmitDetails = async (req, res, next) => {
@@ -15,32 +15,16 @@ const getAllAdmitDetails = async (req, res, next) => {
 };
 
 // Insert Data
-const addData = async (req, res, next) => {
-  const {
-    hospital,
-    date,
-    rooms,
-    fullname,
-    dob,
-    gender,
-    phone,
-    address,
-    guardian,
-    relationship,
-    contact,
-    medications,
-    past,
-    symptoms,
-    prescription,
-  } = req.body;
-
-  let admit;
-
+const addData = async (req, res) => {
   try {
-    admit = new AdmitModel({
+    const { hospital, date, fullname, dob, gender, phone, address, guardian, relationship, contact, admitID } = req.body;
+
+    // Validate input data here if needed
+
+    // Create a new admit record
+    const newAdmit = new AdmitModel({
       hospital,
       date,
-      rooms,
       fullname,
       dob,
       gender,
@@ -49,19 +33,16 @@ const addData = async (req, res, next) => {
       guardian,
       relationship,
       contact,
-      medications,
-      past,
-      symptoms,
-      prescription,
+      admitID
     });
-    await admit.save();
-  } catch (err) {
-    console.log(err);
+
+    await newAdmit.save();
+
+    res.status(200).json({ message: "Admit record added successfully" });
+  } catch (error) {
+    console.error("Error adding admit record", error);
+    res.status(500).json({ message: "Failed to add admit record" });
   }
-  if (!admit) {
-    return res.status(404).json({ message: "Unable to add data" });
-  }
-  return res.status(200).json({ admit });
 };
 
 // Get by Id
@@ -85,7 +66,6 @@ const updateAdmitData = async (req, res, next) => {
   const {
     hospital,
     date,
-    rooms,
     fullname,
     dob,
     gender,
@@ -106,7 +86,6 @@ const updateAdmitData = async (req, res, next) => {
     admit = await AdmitModel.findByIdAndUpdate(id, {
       hospital,
       date,
-      rooms,
       fullname,
       dob,
       gender,
@@ -147,9 +126,23 @@ const deleteAdmitData = async (req, res, next) => {
   return res.status(200).json({ admit });
 };
 
+// Count Admits
+const admitCount = async (req, res) => {
+  const { hospital, date } = req.query;
+
+  try {
+    // Implement logic to count admits based on hospital and date
+    const count = await AdmitModel.countDocuments({ hospital, date });
+    res.status(200).json({ count });
+  } catch (error) {
+    console.error('Error fetching admit count', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 exports.getAllAdmitDetails = getAllAdmitDetails;
 exports.addData = addData;
 exports.getById = getById;
 exports.updateAdmitData = updateAdmitData;
 exports.deleteAdmitData = deleteAdmitData;
-   
+exports.admitCount = admitCount;
