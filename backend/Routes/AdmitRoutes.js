@@ -4,7 +4,7 @@ const AdmitController = require('../Controllers/AdmitController');
 
 // Define routes
 router.get('/admitCount', AdmitController.admitCount);
-router.get('/', AdmitController.getAllAdmitDetails);
+router.get('/details/:admitID', AdmitController.getAllAdmitDetails);
 router.post('/', AdmitController.addData);
 router.get('/:id', AdmitController.getById);
 router.put('/:id', AdmitController.updateAdmitData);

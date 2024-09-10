@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router";
 import AddAdmit from "./Components/Admit/AdmitPatient/AddAdmit";
 import AdmitHome from "./Components/Admit/Home/Home";
-import ViewDetails from "./Components/Admit/DisplayDetails/ViewDetails";
+import ViewAdmit from "./Components/Admit/Display/Display";
 
 
 function App() {
@@ -16,7 +16,8 @@ function App() {
          
           <Route path="/" element={<AdmitHome />} />
           <Route path="/addadmit" element={<AddAdmit />} />
-          <Route path="/admitdetails" element={<ViewDetails />} />
+          <Route path="/admitdetails/:id" element={<ViewAdmit />} /> 
+   
           
          
         </Routes>

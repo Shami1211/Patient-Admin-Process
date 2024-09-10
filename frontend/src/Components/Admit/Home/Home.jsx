@@ -9,7 +9,7 @@ function Home() {
   };
 
   const handleViewDetailsClick = () => {
-    navigate('/admitdetails'); // Navigate to the View Admit Details page
+    navigate('/admitdetails/  '); // Navigate to the View Admit Details page
   };
 
   return (

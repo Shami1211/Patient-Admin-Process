@@ -33,9 +33,7 @@ function AddAdmit() {
   };
 
   useEffect(() => {
-    // Fetch hospitals on component mount
     const fetchHospitals = async () => {
-      // Mock data
       const mockHospitals = [
         { _id: "1", hospitalname: "City Hospital" },
         { _id: "2", hospitalname: "Medical Center" },
@@ -83,12 +81,15 @@ function AddAdmit() {
     e.preventDefault();
     try {
       await sendRequest();
-      alert("Admit Added successfully!");
+      localStorage.setItem("admitID", inputs.admitID); // Save admit ID to local storage
+      alert("Admit added successfully!");
       setSection(4); // Proceed to the final section
     } catch (error) {
       console.error("Error adding admit", error);
     }
   };
+
+
 
   const sendRequest = async () => {
     await axios.post("http://localhost:8081/admit", {
