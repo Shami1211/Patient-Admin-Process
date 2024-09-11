@@ -1,17 +1,23 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 
 function ViewAdmit() {
   const [admit, setAdmit] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { id } = useParams(); // Get the admitID from URL parameters
   const navigate = useNavigate();
 
   useEffect(() => {
+    const admitID = localStorage.getItem("admitID"); // Get admitID from local storage
+    if (!admitID) {
+      alert("Admit ID not found in local storage.");
+      navigate("/");
+      return;
+    }
+
     const fetchAdmitDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8081/admit/${id}`);
+        const response = await axios.get(`http://localhost:8081/admit/${admitID}`);
         setAdmit(response.data.admit);
       } catch (error) {
         console.error("Error fetching admit details", error);
@@ -23,7 +29,7 @@ function ViewAdmit() {
     };
 
     fetchAdmitDetails();
-  }, [id, navigate]);
+  }, [navigate]);
 
   if (loading) return <div>Loading...</div>;
 
