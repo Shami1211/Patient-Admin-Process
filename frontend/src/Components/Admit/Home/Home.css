@@ -130,3 +130,9 @@
   text-transform: uppercase;
   font-size: 30px;
 }
+.from_data_sectn{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}

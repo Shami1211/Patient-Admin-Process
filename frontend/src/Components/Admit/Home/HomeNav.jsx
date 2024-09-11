@@ -32,8 +32,11 @@ function HomeNav() {
           <h3 className={`nav_item_admit ${isActive("/contact")}`}>
             Contact
           </h3>
-          <h3 className={`nav_item_admit ${isActive("/myorders")}`}>
-            My Order
+          <h3
+            className={`nav_item_admit ${isActive("/admitdetails")}`}
+            onClick={() => (window.location.href = "/admitdetails")}
+          >
+            My Admit details
           </h3>
           <h3
             className={`nav_item_admit ${isActive("/adminAdmit")}`}

@@ -339,7 +339,7 @@ function AddAdmit() {
                 <div className="admit_form_full with_set">
                   <h1 className="form_head_admit">Enter Medical Information</h1>
                   <form onSubmit={handleSubmit}>
-                    <div className="input_group">
+                    <div className="">
                       <div className="form-group">
                         <label htmlFor="medications">Medications:</label>
                         <br />
@@ -352,19 +352,20 @@ function AddAdmit() {
                           required
                         />
                       </div>
-                      <div className="form-group">
-                        <label htmlFor="past">Past Medical History:</label>
-                        <br />
-                        <textarea
-                          id="past"
-                          name="past"
-                          className="form_input_colum_full"
-                          value={inputs.past}
-                          onChange={handleChange}
-                          required
-                        />
-                      </div>
                     </div>
+                    <div className="form-group">
+                      <label htmlFor="past">Past Medical History:</label>
+                      <br />
+                      <textarea
+                        id="past"
+                        name="past"
+                        className="form_input_colum_full"
+                        value={inputs.past}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+
                     <div className="form-group">
                       <label htmlFor="symptoms">Symptoms:</label>
                       <br />
