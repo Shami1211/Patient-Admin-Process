@@ -43,6 +43,14 @@ const AdmitSchema = new Schema({
     type: String,
     required: true,
   },
+  admitID: {
+    type: String,
+    required: true,
+  },
+  nic: {
+    type: String,
+    required: true,  
+  },
   medications: {
     type: String,
   },

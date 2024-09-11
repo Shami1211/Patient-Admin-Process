@@ -1,60 +1,83 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router";
+import React, { useState } from 'react';
+import axios from 'axios';
 
-function ViewAdmit() {
-  const [admit, setAdmit] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+function FetchAdmitData() {
+  const [nic, setNIC] = useState('');
+  const [admitID, setAdmitID] = useState('');
+  const [admitData, setAdmitData] = useState(null);
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    const admitID = localStorage.getItem("admitID"); // Get admitID from local storage
-    if (!admitID) {
-      alert("Admit ID not found in local storage.");
-      navigate("/");
-      return;
+  const fetchByNIC = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8081/admit/byNIC/${nic}`);
+      setAdmitData(response.data.admit);
+      setError('');
+    } catch (err) {
+      setError('No data found for the provided NIC.');
+      setAdmitData(null);
     }
+  };
 
-    const fetchAdmitDetails = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8081/admit/${admitID}`);
-        setAdmit(response.data.admit);
-      } catch (error) {
-        console.error("Error fetching admit details", error);
-        alert("Failed to fetch admit details.");
-        navigate("/");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAdmitDetails();
-  }, [navigate]);
-
-  if (loading) return <div>Loading...</div>;
-
-  if (!admit) return <div>No admit details found.</div>;
+  const fetchByAdmitID = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8081/admit/byAdmitID/${admitID}`);
+      setAdmitData(response.data.admit);
+      setError('');
+    } catch (err) {
+      setError('No data found for the provided AdmitID.');
+      setAdmitData(null);
+    }
+  };
 
   return (
-    <div className="admit_details">
-      <h1>Admit Details</h1>
-      <p><strong>Hospital:</strong> {admit.hospital}</p>
-      <p><strong>Date:</strong> {admit.date}</p>
-      <p><strong>Full Name:</strong> {admit.fullname}</p>
-      <p><strong>Date of Birth:</strong> {admit.dob}</p>
-      <p><strong>Gender:</strong> {admit.gender}</p>
-      <p><strong>Phone:</strong> {admit.phone}</p>
-      <p><strong>Address:</strong> {admit.address}</p>
-      <p><strong>Guardian:</strong> {admit.guardian}</p>
-      <p><strong>Relationship:</strong> {admit.relationship}</p>
-      <p><strong>Emergency Contact:</strong> {admit.contact}</p>
-      <p><strong>Medications:</strong> {admit.medications}</p>
-      <p><strong>Past Medical History:</strong> {admit.past}</p>
-      <p><strong>Symptoms:</strong> {admit.symptoms}</p>
-      <p><strong>Prescription:</strong> {admit.prescription}</p>
-      <button onClick={() => navigate("/")}>Return Home</button>
+    <div>
+      <div>
+        <h2>Fetch Data by NIC</h2>
+        <input
+          type="text"
+          placeholder="Enter NIC"
+          value={nic}
+          onChange={(e) => setNIC(e.target.value)}
+        />
+        <button onClick={fetchByNIC}>Fetch Data</button>
+      </div>
+      <h2>OR</h2>
+      <div>
+        <h2>Fetch Data by AdmitID</h2>
+        <input
+          type="text"
+          placeholder="Enter AdmitID"
+          value={admitID}
+          onChange={(e) => setAdmitID(e.target.value)}
+        />
+        <button onClick={fetchByAdmitID}>Fetch Data</button>
+      </div>
+
+      {error && <p>{error}</p>}
+
+      {admitData && (
+        <div>
+          <h3>Admit Details:</h3>
+          <p><strong>Hospital:</strong> {admitData.hospital}</p>
+          <p><strong>Date:</strong> {admitData.date}</p>
+          <p><strong>Full Name:</strong> {admitData.fullname}</p>
+          <p><strong>Date of Birth:</strong> {admitData.dob}</p>
+          <p><strong>Gender:</strong> {admitData.gender}</p>
+          <p><strong>Phone:</strong> {admitData.phone}</p>
+          <p><strong>Address:</strong> {admitData.address}</p>
+          <p><strong>Guardian:</strong> {admitData.guardian}</p>
+          <p><strong>Relationship:</strong> {admitData.relationship}</p>
+          <p><strong>Contact:</strong> {admitData.contact}</p>
+          <p><strong>Admit ID:</strong> {admitData.admitID}</p>
+          <p><strong>NIC:</strong> {admitData.nic}</p>
+          <p><strong>Medications:</strong> {admitData.medications}</p>
+          <p><strong>Past Medical History:</strong> {admitData.past}</p>
+          <p><strong>Symptoms:</strong> {admitData.symptoms}</p>
+          <p><strong>Prescription:</strong> {admitData.prescription}</p>
+        </div>
+      )}
     </div>
   );
 }
 
-export default ViewAdmit;
+export default FetchAdmitData;

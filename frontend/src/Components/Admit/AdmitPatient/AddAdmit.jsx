@@ -17,10 +17,11 @@ function AddAdmit() {
     relationship: "",
     contact: "",
     admitID: "",
-    medications: "", // Added new fields
+    medications: "", 
     past: "",
     symptoms: "",
     prescription: "",
+    nic: "", // Added NIC field
   });
   const [hospitals, setHospitals] = useState([]);
   const [admitCount, setAdmitCount] = useState(0);
@@ -89,8 +90,6 @@ function AddAdmit() {
     }
   };
 
-
-
   const sendRequest = async () => {
     await axios.post("http://localhost:8081/admit", {
       hospital: inputs.hospital,
@@ -104,10 +103,11 @@ function AddAdmit() {
       relationship: inputs.relationship,
       contact: inputs.contact,
       admitID: inputs.admitID,
-      medications: inputs.medications, // Added new fields
+      medications: inputs.medications,
       past: inputs.past,
       symptoms: inputs.symptoms,
       prescription: inputs.prescription,
+      nic: inputs.nic, // Send NIC field
     });
   };
 
@@ -271,6 +271,18 @@ function AddAdmit() {
                       required
                     />
                   </div>
+                  <div className="form-group">
+                    <label htmlFor="nic">NIC:</label>
+                    <input
+                      type="text"
+                      id="nic"
+                      name="nic"
+                      className="form-input"
+                      value={inputs.nic}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
                   <button type="button" className="submit_btn" onClick={() => setSection(3)}>
                     Next: Medical Information
                   </button>
@@ -285,8 +297,7 @@ function AddAdmit() {
                   <div className="input_group">
                     <div className="form-group">
                       <label htmlFor="medications">Medications:</label>
-                      <input
-                        type="text"
+                      <textarea
                         id="medications"
                         name="medications"
                         className="form-input"
@@ -304,45 +315,45 @@ function AddAdmit() {
                         value={inputs.past}
                         onChange={handleChange}
                         required
-                      ></textarea>
+                      />
                     </div>
                   </div>
-                  <div className="input_group">
-                    <div className="form-group">
-                      <label htmlFor="symptoms">Symptoms:</label>
-                      <textarea
-                        id="symptoms"
-                        name="symptoms"
-                        className="form-input"
-                        value={inputs.symptoms}
-                        onChange={handleChange}
-                        required
-                      ></textarea>
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="prescription">Prescription:</label>
-                      <textarea
-                        id="prescription"
-                        name="prescription"
-                        className="form-input"
-                        value={inputs.prescription}
-                        onChange={handleChange}
-                        required
-                      ></textarea>
-                    </div>
+                  <div className="form-group">
+                    <label htmlFor="symptoms">Symptoms:</label>
+                    <textarea
+                      id="symptoms"
+                      name="symptoms"
+                      className="form-input"
+                      value={inputs.symptoms}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="prescription">Prescription:</label>
+                    <textarea
+                      id="prescription"
+                      name="prescription"
+                      className="form-input"
+                      value={inputs.prescription}
+                      onChange={handleChange}
+                      required
+                    />
                   </div>
                   <button type="submit" className="submit_btn">
-                    Submit Admit Details
+                    Submit
                   </button>
                 </form>
               </>
             )}
 
             {section === 4 && (
-              <div className="submit_section">
-                <h1>Admit Successfully Submitted!</h1>
+              <div className="success_message">
+                <h1>Admit Added Successfully!</h1>
+                <p>Your admit ID is: {inputs.admitID}</p>
                 <button onClick={() => navigate("/")}>Return Home</button>
               </div>
+              
             )}
           </div>
         </div>
