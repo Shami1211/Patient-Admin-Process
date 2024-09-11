@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
-
+import HomeNav from "../Home/HomeNav";
+import "./admin.css";
 function AddAdmit() {
   const navigate = useNavigate();
   const [section, setSection] = useState(1); // Controls the form sections
@@ -17,7 +19,7 @@ function AddAdmit() {
     relationship: "",
     contact: "",
     admitID: "",
-    medications: "", 
+    medications: "",
     past: "",
     symptoms: "",
     prescription: "",
@@ -25,7 +27,7 @@ function AddAdmit() {
   });
   const [hospitals, setHospitals] = useState([]);
   const [admitCount, setAdmitCount] = useState(0);
-  const maxAdmits = 20; // Maximum allowed admits per hospital per day
+  const maxAdmits = 1; // Maximum allowed admits per hospital per day
 
   const generateAdmitID = () => {
     const prefix = "AD";
@@ -113,238 +115,286 @@ function AddAdmit() {
 
   return (
     <div>
-      <div className="admit_form_background">
+      <HomeNav />
+      <div className="admit_home_bk">
         <div className="form_full_admit">
-          <div className="admit_form_full">
+          <div>
             {section === 1 && (
-              <>
-                <h1 className="form_head_admit">Check Hospital Availability</h1>
-                <form onSubmit={(e) => e.preventDefault()}>
-                  <div className="input_group">
-                    <div className="form-group">
-                      <label htmlFor="hospital">Select Hospital:</label>
-                      <select
-                        id="hospital"
-                        name="hospital"
-                        className="form-input"
-                        value={inputs.hospital}
-                        onChange={handleChange}
-                        required
-                      >
-                        <option value="">Select Hospital</option>
-                        {hospitals.map((hospital) => (
-                          <option key={hospital._id} value={hospital.hospitalname}>
-                            {hospital.hospitalname}
-                          </option>
-                        ))}
-                      </select>
+              <div className="from_one">
+                <div className="admit_form_full">
+                  <h1 className="form_head_admit">
+                    Check Hospital Availability
+                  </h1>
+                  <form onSubmit={(e) => e.preventDefault()}>
+                    <div className="input_group">
+                      <div className="form_group_admit">
+                        <div>
+                          <label htmlFor="hospital">Select Hospital:</label>
+                          <br />
+                          <select
+                            id="hospital"
+                            name="hospital"
+                            className="form_input_colum"
+                            value={inputs.hospital}
+                            onChange={handleChange}
+                            required
+                          >
+                            <option value="">Select Hospital</option>
+                            {hospitals.map((hospital) => (
+                              <option
+                                key={hospital._id}
+                                value={hospital.hospitalname}
+                              >
+                                {hospital.hospitalname}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <div className="form-group">
+                            <label htmlFor="date">Select Date:</label>
+                            <br />
+                            <input
+                              type="date"
+                              id="date"
+                              name="date"
+                              className="form_input_colum"
+                              value={inputs.date}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="form-group">
-                      <label htmlFor="date">Select Date:</label>
-                      <input
-                        type="date"
-                        id="date"
-                        name="date"
-                        className="form-input"
-                        value={inputs.date}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <button type="button" className="submit_btn" onClick={checkAvailability}>
-                    Check Availability
-                  </button>
-                </form>
-              </>
+                    <button
+                      type="button"
+                      className="submit_btn_checkbtn"
+                      onClick={checkAvailability}
+                    >
+                      Check Availability
+                    </button>
+                  </form>
+                </div>
+              </div>
             )}
 
             {section === 2 && (
-              <>
-                <h1 className="form_head_admit">Enter Patient Details</h1>
-                <form onSubmit={(e) => e.preventDefault()}>
-                  <div className="input_group">
+              <div className="from_one">
+                <div className="admit_form_full">
+                  <h1 className="form_head_admit">Enter Patient Details</h1>
+                  <form onSubmit={(e) => e.preventDefault()}>
+                    <div className="input_group">
+                      <div className="form_group_admit">
+                        <div className="form-group">
+                          <label htmlFor="fullname">Full Name:</label>
+                          <br />
+                          <input
+                            type="text"
+                            id="fullname"
+                            name="fullname"
+                            className="form_input_colum"
+                            value={inputs.fullname}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="dob">Date of Birth:</label>
+                          <br />
+                          <input
+                            type="date"
+                            id="dob"
+                            name="dob"
+                            className="form_input_colum"
+                            value={inputs.dob}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="form_group_admit">
+                      <div className="form_group_admit">
+                        <div className="form-group">
+                          <label htmlFor="gender">Gender:</label>
+                          <br />
+                          <select
+                            id="gender"
+                            name="gender"
+                            className="form_input_colum"
+                            value={inputs.gender}
+                            onChange={handleChange}
+                            required
+                          >
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="phone">Phone:</label>
+                          <br />
+                          <input
+                            type="text"
+                            id="phone"
+                            pattern="[0-9]{10}"
+                            name="phone"
+                            className="form_input_colum"
+                            value={inputs.phone}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div>
                     <div className="form-group">
-                      <label htmlFor="fullname">Full Name:</label>
+                      <label htmlFor="address">Address:</label>
+                      <br />
                       <input
                         type="text"
-                        id="fullname"
-                        name="fullname"
-                        className="form-input"
-                        value={inputs.fullname}
+                        id="address"
+                        name="address"
+                        className="form_input_colum_full"
+                        value={inputs.address}
                         onChange={handleChange}
                         required
                       />
                     </div>
-                    <div className="form-group">
-                      <label htmlFor="dob">Date of Birth:</label>
-                      <input
-                        type="date"
-                        id="dob"
-                        name="dob"
-                        className="form-input"
-                        value={inputs.dob}
-                        onChange={handleChange}
-                        required
-                      />
+                    <div className="input_group">
+                      <div className="form_group_admit">
+                        <div className="form-group">
+                          <label htmlFor="guardian">Guardian Name:</label>
+                          <br />
+                          <input
+                            type="text"
+                            id="guardian"
+                            name="guardian"
+                            className="form_input_colum"
+                            value={inputs.guardian}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="relationship">Relationship:</label>
+                          <br />
+                          <input
+                            type="text"
+                            id="relationship"
+                            name="relationship"
+                            className="form_input_colum"
+                            value={inputs.relationship}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="input_group">
-                    <div className="form-group">
-                      <label htmlFor="gender">Gender:</label>
-                      <select
-                        id="gender"
-                        name="gender"
-                        className="form-input"
-                        value={inputs.gender}
-                        onChange={handleChange}
-                        required
-                      >
-                        <option value="">Select Gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                      </select>
+                    <div className="form_group_admit">
+                      <div className="form-group">
+                        <label htmlFor="contact">Emergency Contact:</label>
+                        <br />
+                        <input
+                          type="number"
+                          id="contact"
+                          pattern="[0-9]{10}"
+                          name="contact"
+                          className="form_input_colum"
+                          value={inputs.contact}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="nic">NIC:</label>
+                        <br />
+                        <input
+                          type="text"
+                          id="nic"
+                          name="nic"
+                          className="form_input_colum"
+                          value={inputs.nic}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
                     </div>
-                    <div className="form-group">
-                      <label htmlFor="phone">Phone:</label>
-                      <input
-                        type="text"
-                        id="phone"
-                        pattern="[0-9]{10}"
-                        name="phone"
-                        className="form-input"
-                        value={inputs.phone}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="address">Address:</label>
-                    <input
-                      type="text"
-                      id="address"
-                      name="address"
-                      className="form-input"
-                      value={inputs.address}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="input_group">
-                    <div className="form-group">
-                      <label htmlFor="guardian">Guardian Name:</label>
-                      <input
-                        type="text"
-                        id="guardian"
-                        name="guardian"
-                        className="form-input"
-                        value={inputs.guardian}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="relationship">Relationship:</label>
-                      <input
-                        type="text"
-                        id="relationship"
-                        name="relationship"
-                        className="form-input"
-                        value={inputs.relationship}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="contact">Emergency Contact:</label>
-                    <input
-                      type="text"
-                      id="contact"
-                      pattern="[0-9]{10}"
-                      name="contact"
-                      className="form-input"
-                      value={inputs.contact}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="nic">NIC:</label>
-                    <input
-                      type="text"
-                      id="nic"
-                      name="nic"
-                      className="form-input"
-                      value={inputs.nic}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <button type="button" className="submit_btn" onClick={() => setSection(3)}>
-                    Next: Medical Information
-                  </button>
-                </form>
-              </>
+
+                    <button
+                      type="button"
+                      className="submit_btn_checkbtn"
+                      onClick={() => setSection(3)}
+                    >
+                      Next
+                    </button>
+                  </form>
+                </div>
+              </div>
             )}
 
             {section === 3 && (
-              <>
-                <h1 className="form_head_admit">Enter Medical Information</h1>
-                <form onSubmit={handleSubmit}>
-                  <div className="input_group">
+              <div className="from_one">
+                <div className="admit_form_full with_set">
+                  <h1 className="form_head_admit">Enter Medical Information</h1>
+                  <form onSubmit={handleSubmit}>
+                    <div className="input_group">
+                      <div className="form-group">
+                        <label htmlFor="medications">Medications:</label>
+                        <br />
+                        <textarea
+                          id="medications"
+                          name="medications"
+                          className="form_input_colum_full"
+                          value={inputs.medications}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="past">Past Medical History:</label>
+                        <br />
+                        <textarea
+                          id="past"
+                          name="past"
+                          className="form_input_colum_full"
+                          value={inputs.past}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
+                    </div>
                     <div className="form-group">
-                      <label htmlFor="medications">Medications:</label>
+                      <label htmlFor="symptoms">Symptoms:</label>
+                      <br />
                       <textarea
-                        id="medications"
-                        name="medications"
-                        className="form-input"
-                        value={inputs.medications}
+                        id="symptoms"
+                        name="symptoms"
+                        className="form_input_colum_full"
+                        value={inputs.symptoms}
                         onChange={handleChange}
                         required
                       />
                     </div>
                     <div className="form-group">
-                      <label htmlFor="past">Past Medical History:</label>
+                      <label htmlFor="prescription">Prescription:</label>
+                      <br />
                       <textarea
-                        id="past"
-                        name="past"
-                        className="form-input"
-                        value={inputs.past}
+                        id="prescription"
+                        name="prescription"
+                        className="form_input_colum_full"
+                        value={inputs.prescription}
                         onChange={handleChange}
                         required
                       />
                     </div>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="symptoms">Symptoms:</label>
-                    <textarea
-                      id="symptoms"
-                      name="symptoms"
-                      className="form-input"
-                      value={inputs.symptoms}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="prescription">Prescription:</label>
-                    <textarea
-                      id="prescription"
-                      name="prescription"
-                      className="form-input"
-                      value={inputs.prescription}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <button type="submit" className="submit_btn">
-                    Submit
-                  </button>
-                </form>
-              </>
+                    <button type="submit" className="submit_btn_checkbtn">
+                      Submit
+                    </button>
+                  </form>
+                </div>
+              </div>
             )}
 
             {section === 4 && (
@@ -353,7 +403,6 @@ function AddAdmit() {
                 <p>Your admit ID is: {inputs.admitID}</p>
                 <button onClick={() => navigate("/")}>Return Home</button>
               </div>
-              
             )}
           </div>
         </div>

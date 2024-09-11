@@ -1,33 +1,39 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import HomeNav from "./HomeNav";
 
 function Home() {
   const navigate = useNavigate();
 
   const handleAddNewClick = () => {
-    navigate('/addadmit'); // Navigate to the Add Admit page
+    navigate("/addadmit"); // Navigate to the Add Admit page
   };
 
   const handleViewDetailsClick = () => {
-    const admitID = localStorage.getItem('admitID');
-    if (admitID) {
-      navigate(`/admitdetails/${admitID}`); // Use admitID for navigation
-    } else {
-      alert("No admit ID found in local storage.");
-    }
+    navigate("/admitdetails"); // Navigate to the Add Admit page
   };
-
   return (
     <div className="home-container">
-      <h1>Hospital Admission System</h1>
-      
-      <div className="button-group">
-        <button className="home-button" onClick={handleAddNewClick}>
-          Add New Admit
-        </button>
-        <button className="home-button" onClick={handleViewDetailsClick}>
-          View Admit Details
-        </button>
+      <HomeNav />
+      <div className="admit_home_bk">
+        <div className="home_admit_body">
+          <h1 className="home_topic_admit">
+            <span className="main_name_admit_home">We are here to </span>
+            <br></br>Make your Med-Stay, <br></br>your Home-Stay
+          </h1>
+          <p className="home_para_admit">
+            Your health is our priority. We ensure safe and <br /> reliable
+            medication, tailored to your needs.
+          </p>
+          <button onClick={handleAddNewClick} className="btn_admit_book">
+            Admit Now
+          </button>
+          <button
+            onClick={handleViewDetailsClick}
+            className="btn_admit_book lft_bn"
+          >
+            My Admit Details
+          </button>
+        </div>
       </div>
     </div>
   );

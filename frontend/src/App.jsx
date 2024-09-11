@@ -8,20 +8,13 @@ import AdminDisplayPage from "./Components/Admit/Admin/AdminDisplayPage";
 function App() {
   return (
     <div>
-    
       <React.Fragment>
         <Routes>
-         
           {/*Admit Patient */}
-         
           <Route path="/" element={<AdmitHome />} />
           <Route path="/addadmit" element={<AddAdmit />} />
-          <Route path="/admitdetails/:id" element={<ViewAdmit />} />
-          <Route path="/adminAdmit" element={<AdminDisplayPage/>} />
-
-   
-          
-         
+          <Route path="/admitdetails" element={<ViewAdmit />} />
+          <Route path="/adminAdmit" element={<AdminDisplayPage />} />
         </Routes>
       </React.Fragment>
     </div>
