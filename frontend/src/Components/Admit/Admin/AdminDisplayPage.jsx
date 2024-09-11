@@ -103,7 +103,7 @@ function DisplayAllAdmits() {
               className="search_input"
               onChange={handleSearch}
             />
-            <button className="search_btn" onClick={generateReport}>
+            <button className="admit_btnn" onClick={generateReport}>
               Generate Report
             </button>
           </div>

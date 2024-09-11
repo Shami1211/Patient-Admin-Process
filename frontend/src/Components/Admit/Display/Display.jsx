@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import HomeNav from "../Home/HomeNav";
 import "./admitdata.css";
+import NotFound from "./img/nofound.png";
 function FetchAdmitData() {
   const [nic, setNIC] = useState("");
   const [admitID, setAdmitID] = useState("");
@@ -64,8 +65,8 @@ function FetchAdmitData() {
         `http://localhost:8081/admit/${admitData._id}`,
         updateForm
       );
-      setError("");
       alert("Record updated successfully");
+      window.location.reload();
       setShowUpdateForm(false); // Hide update form after updating
     } catch (err) {
       setError("Failed to update the record.");
@@ -149,7 +150,12 @@ function FetchAdmitData() {
           </div>
         )}
       </div>
-      {error && <p>{error}</p>}
+      {error && (
+        <div className="not_found_box">
+          <img src={NotFound} alt="noimg" className="notfound" />
+          <p className="nodata_pera">No Details Found</p>
+        </div>
+      )}
       {admitData && (
         <div className="data_card_admit">
           <div className="data_from_admit">
