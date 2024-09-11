@@ -81,11 +81,11 @@
   background-repeat: no-repeat;
   background-image: url(./img/homeback.png);
 }
-.form_full_admit {
+/* .form_full_admit {
   height: 100vh;
   display: flex;
   align-items: center;
-}
+} */
 .admit_from_full {
   width: 650px;
   margin: 0px auto;

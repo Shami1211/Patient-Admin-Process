@@ -6,7 +6,7 @@ const getAllAdmitDetails = async (req, res, next) => {
   try {
     admit = await AdmitModel.find();
   } catch (err) {
-    console.log(err); 
+    console.log(err);
   }
   if (!admit) {
     return res.status(404).json({ message: "Data not found" });
@@ -29,11 +29,11 @@ const addData = async (req, res) => {
       relationship,
       contact,
       admitID,
-      nic,  // Capture NIC
-      medications, 
-      past, 
-      symptoms, 
-      prescription
+      nic, // Capture NIC
+      medications,
+      past,
+      symptoms,
+      prescription,
     } = req.body;
 
     const newAdmit = new AdmitModel({
@@ -48,11 +48,11 @@ const addData = async (req, res) => {
       relationship,
       contact,
       admitID,
-      nic,  // Save NIC
+      nic, // Save NIC
       medications,
       past,
       symptoms,
-      prescription
+      prescription,
     });
 
     await newAdmit.save();
@@ -63,7 +63,6 @@ const addData = async (req, res) => {
     res.status(500).json({ message: "Failed to add admit record" });
   }
 };
-
 
 // Get by Id
 const getById = async (req, res, next) => {
@@ -94,7 +93,7 @@ const updateAdmitData = async (req, res, next) => {
     guardian,
     relationship,
     contact,
-    nic,  // Capture NIC for updates
+    nic, // Capture NIC for updates
     medications,
     past,
     symptoms,
@@ -115,7 +114,7 @@ const updateAdmitData = async (req, res, next) => {
       guardian,
       relationship,
       contact,
-      nic,  // Update NIC
+      nic, // Update NIC
       medications,
       past,
       symptoms,
@@ -130,7 +129,6 @@ const updateAdmitData = async (req, res, next) => {
   }
   return res.status(200).json({ admit });
 };
-
 
 // Delete Data
 const deleteAdmitData = async (req, res, next) => {
@@ -158,8 +156,8 @@ const admitCount = async (req, res) => {
     const count = await AdmitModel.countDocuments({ hospital, date });
     res.status(200).json({ count });
   } catch (error) {
-    console.error('Error fetching admit count', error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error fetching admit count", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -199,9 +197,6 @@ const getByAdmitID = async (req, res) => {
   return res.status(200).json({ admit });
 };
 
-
-
-
 exports.getAllAdmitDetails = getAllAdmitDetails;
 exports.addData = addData;
 exports.getById = getById;
@@ -210,4 +205,3 @@ exports.deleteAdmitData = deleteAdmitData;
 exports.admitCount = admitCount;
 exports.getByNIC = getByNIC;
 exports.getByAdmitID = getByAdmitID;
-

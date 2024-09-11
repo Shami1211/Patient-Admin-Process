@@ -399,10 +399,15 @@ function AddAdmit() {
             )}
 
             {section === 4 && (
-              <div className="success_message">
-                <h1>Admit Added Successfully!</h1>
+              <div className="admit_form_full">
+                <h1 className="form_head_admit">Admit Added Successfully!</h1>
                 <p>Your admit ID is: {inputs.admitID}</p>
-                <button onClick={() => navigate("/")}>Return Home</button>
+                <button
+                  className="submit_btn_checkbtn"
+                  onClick={() => navigate("/")}
+                >
+                  Return Home
+                </button>
               </div>
             )}
           </div>
