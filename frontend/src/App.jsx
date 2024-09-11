@@ -16,7 +16,8 @@ function App() {
          
           <Route path="/" element={<AdmitHome />} />
           <Route path="/addadmit" element={<AddAdmit />} />
-          <Route path="/admitdetails/:id" element={<ViewAdmit />} /> 
+          <Route path="/admitdetails/:id" element={<ViewAdmit />} />
+
    
           
          

@@ -9,7 +9,12 @@ function Home() {
   };
 
   const handleViewDetailsClick = () => {
-    navigate('/admitdetails/  '); // Navigate to the View Admit Details page
+    const admitID = localStorage.getItem('admitID');
+    if (admitID) {
+      navigate(`/admitdetails/${admitID}`); // Use admitID for navigation
+    } else {
+      alert("No admit ID found in local storage.");
+    }
   };
 
   return (
