@@ -65,7 +65,7 @@
   margin: 5px 0 10px 0;
   border-radius: 5px;
   font-size: 17px;
-  width: 100%;
+  width: 565px;
   padding: 4px 10px;
   border: 1px solid #2d30ca;
 }
@@ -367,4 +367,19 @@ input[type=number]::-webkit-outer-spin-button {
 /* For Firefox */
 input[type=number] {
     -moz-appearance: textfield;
+}
+.presImg {
+  width: 150px;
+  height: auto;
+}
+.cen{
+  text-align: center;
+  display: flex;
+  border-radius: 5px;
+  margin: 15px auto;
+  align-items: center;
+}
+.linkbtn{
+  color: white;
+  text-decoration: none;
 }

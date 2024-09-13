@@ -55,10 +55,10 @@ function AddAdmit() {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
     setInputs((prevInputs) => ({
       ...prevInputs,
-      [name]: value,
+      [name]: name === "prescription" ? files[0] : value,
     }));
   };
 
@@ -92,27 +92,37 @@ function AddAdmit() {
     }
   };
 
+  // const sendRequest = async () => {
+  //   await axios.post("http://localhost:8081/admit", {
+  //     hospital: inputs.hospital,
+  //     date: inputs.date,
+  //     fullname: inputs.fullname,
+  //     dob: inputs.dob,
+  //     gender: inputs.gender,
+  //     phone: inputs.phone,
+  //     address: inputs.address,
+  //     guardian: inputs.guardian,
+  //     relationship: inputs.relationship,
+  //     contact: inputs.contact,
+  //     admitID: inputs.admitID,
+  //     medications: inputs.medications,
+  //     past: inputs.past,
+  //     symptoms: inputs.symptoms,
+  //     prescription: inputs.prescription,
+  //     nic: inputs.nic, // Send NIC field
+  //   });
+  // };
   const sendRequest = async () => {
-    await axios.post("http://localhost:8081/admit", {
-      hospital: inputs.hospital,
-      date: inputs.date,
-      fullname: inputs.fullname,
-      dob: inputs.dob,
-      gender: inputs.gender,
-      phone: inputs.phone,
-      address: inputs.address,
-      guardian: inputs.guardian,
-      relationship: inputs.relationship,
-      contact: inputs.contact,
-      admitID: inputs.admitID,
-      medications: inputs.medications,
-      past: inputs.past,
-      symptoms: inputs.symptoms,
-      prescription: inputs.prescription,
-      nic: inputs.nic, // Send NIC field
+    const formData = new FormData();
+    for (const key in inputs) {
+      formData.append(key, inputs[key]);
+    }
+    await axios.post("http://localhost:8081/admit", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
   };
-
   return (
     <div>
       <HomeNav />
@@ -381,11 +391,11 @@ function AddAdmit() {
                     <div className="form-group">
                       <label htmlFor="prescription">Prescription:</label>
                       <br />
-                      <textarea
+                      <input
+                        type="file"
                         id="prescription"
                         name="prescription"
                         className="form_input_colum_full"
-                        value={inputs.prescription}
                         onChange={handleChange}
                         required
                       />

@@ -87,6 +87,23 @@ function DisplayAllAdmits() {
     doc.save("admit_records_report.pdf");
   };
 
+  const deleteHandler = async (_id) => {
+    // Define _id as a parameter
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this Data?"
+    );
+
+    if (confirmed) {
+      try {
+        await axios.delete(`http://localhost:8081/admit/${_id}`); // Correct URL construction
+        window.alert("deleted successfully!");
+        window.location.reload(); // Reload the page
+      } catch (error) {
+        // Handle deletion error if needed
+        console.error("Error deleting details:", error);
+      }
+    }
+  };
   return (
     <div>
       <HomeNav />
@@ -128,6 +145,7 @@ function DisplayAllAdmits() {
                   <th className="admit_table_th">Past Medical History</th>
                   <th className="admit_table_th">Symptoms</th>
                   <th className="admit_table_th">Prescription</th>
+                  <th className="admit_table_th">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -149,7 +167,25 @@ function DisplayAllAdmits() {
                       <td className="admit_table_td">{admit.medications}</td>
                       <td className="admit_table_td">{admit.past}</td>
                       <td className="admit_table_td">{admit.symptoms}</td>
-                      <td className="admit_table_td">{admit.prescription}</td>
+                      <td className="admit_table_td">
+                        {admit.prescription ? (
+                          <img
+                            src={`http://localhost:8081/uploadsIMG/${admit.prescription}`}
+                            alt={admit.prescription}
+                            className="presImg"
+                          />
+                        ) : (
+                          <span>No image available</span>
+                        )}
+                      </td>
+                      <td className="admit_table_td">
+                      <button
+                          className="admit_deletbtn2 "
+                          onClick={() => deleteHandler(admit._id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
                     </tr>
                   ))
                 ) : (

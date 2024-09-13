@@ -53,15 +53,19 @@ const AdmitSchema = new Schema({
   },
   medications: {
     type: String,
+    required: true, 
   },
   past: {
     type: String,
+    required: true, 
   },
   symptoms: {
     type: String,
+    required: true, 
   },
   prescription: {
     type: String,
+    required: true, 
   },
 });
 

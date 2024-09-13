@@ -1,42 +1,54 @@
 const AdmitModel = require("../Model/Admit");
+const path = require("path");
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploadsIMG/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage: storage });
 
 // Display Data
 const getAllAdmitDetails = async (req, res, next) => {
-  let admit;
   try {
-    admit = await AdmitModel.find();
+    const admit = await AdmitModel.find();
+    if (!admit) {
+      return res.status(404).json({ message: "Data not found" });
+    }
+    return res.status(200).json({ admit });
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ message: "Server Error" });
   }
-  if (!admit) {
-    return res.status(404).json({ message: "Data not found" });
-  }
-  return res.status(200).json({ admit });
 };
 
 // Insert Data
 const addData = async (req, res) => {
+  const {
+    hospital,
+    date,
+    fullname,
+    dob,
+    gender,
+    phone,
+    address,
+    guardian,
+    relationship,
+    contact,
+    admitID,
+    nic, // Capture NIC
+    medications,
+    past,
+    symptoms,
+  } = req.body;
+  const prescription = path.basename(req.file.path);
   try {
-    const {
-      hospital,
-      date,
-      fullname,
-      dob,
-      gender,
-      phone,
-      address,
-      guardian,
-      relationship,
-      contact,
-      admitID,
-      nic, // Capture NIC
-      medications,
-      past,
-      symptoms,
-      prescription,
-    } = req.body;
-
-    const newAdmit = new AdmitModel({
+    const admit = new AdmitModel({
       hospital,
       date,
       fullname,
@@ -55,11 +67,10 @@ const addData = async (req, res) => {
       prescription,
     });
 
-    await newAdmit.save();
-
-    res.status(200).json({ message: "Admit record added successfully" });
+    await admit.save();
+    res.status(200).json({ admit });
   } catch (error) {
-    console.error("Error adding admit record", error);
+    console.log(error);
     res.status(500).json({ message: "Failed to add admit record" });
   }
 };
@@ -67,16 +78,16 @@ const addData = async (req, res) => {
 // Get by Id
 const getById = async (req, res, next) => {
   const id = req.params.id;
-  let admit;
   try {
-    admit = await AdmitModel.findById(id);
+    const admit = await AdmitModel.findById(id);
+    if (!admit) {
+      return res.status(404).json({ message: "Data Not Found" });
+    }
+    return res.status(200).json({ admit });
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ message: "Server Error" });
   }
-  if (!admit) {
-    return res.status(404).json({ message: "Data not found" });
-  }
-  return res.status(200).json({ admit });
 };
 
 // Update Details
@@ -97,13 +108,11 @@ const updateAdmitData = async (req, res, next) => {
     medications,
     past,
     symptoms,
-    prescription,
   } = req.body;
-
-  let admit;
+  const prescription = req.file ? path.basename(req.file.path) : undefined;
 
   try {
-    admit = await AdmitModel.findByIdAndUpdate(id, {
+    const updatedData = {
       hospital,
       date,
       fullname,
@@ -118,16 +127,22 @@ const updateAdmitData = async (req, res, next) => {
       medications,
       past,
       symptoms,
-      prescription,
+    };
+    if (prescription) {
+      updatedData.prescription = prescription;
+    }
+
+    const admit = await AdmitModel.findByIdAndUpdate(id, updatedData, {
+      new: true,
     });
-    admit = await admit.save();
+    if (!admit) {
+      return res.status(404).json({ message: "Unable to Update data" });
+    }
+    return res.status(200).json({ admit });
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ message: "Server Error" });
   }
-  if (!admit) {
-    return res.status(404).json({ message: "Unable to update data" });
-  }
-  return res.status(200).json({ admit });
 };
 
 // Delete Data
@@ -142,7 +157,7 @@ const deleteAdmitData = async (req, res, next) => {
     console.log(err);
   }
   if (!admit) {
-    return res.status(404).json({ message: "Unable to delete details" });
+    return res.status(404).json({ message: "Unable to Delete Details" });
   }
   return res.status(200).json({ admit });
 };
@@ -205,3 +220,4 @@ exports.deleteAdmitData = deleteAdmitData;
 exports.admitCount = admitCount;
 exports.getByNIC = getByNIC;
 exports.getByAdmitID = getByAdmitID;
+exports.upload = upload;
