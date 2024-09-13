@@ -147,7 +147,7 @@ function UpdateData() {
                 <label className="admit_card_label">Phone:</label>
                 <br />
                 <input
-                  type="text"
+                  type="number"
                   name="phone"
                   placeholder="Phone"
                   className="form_input_colum_update"

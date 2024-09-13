@@ -247,7 +247,7 @@ function AddAdmit() {
                           <label htmlFor="phone">Phone:</label>
                           <br />
                           <input
-                            type="text"
+                            type="number"
                             id="phone"
                             pattern="[0-9]{10}"
                             name="phone"
@@ -414,9 +414,9 @@ function AddAdmit() {
                 <p>Your admit ID is: {inputs.admitID}</p>
                 <button
                   className="submit_btn_checkbtn"
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate("/admitdetails")}
                 >
-                  Return Home
+                  My Admit Details
                 </button>
               </div>
             )}
