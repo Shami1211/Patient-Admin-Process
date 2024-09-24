@@ -91,27 +91,6 @@ function AddAdmit() {
       console.error("Error adding admit", error);
     }
   };
-
-  // const sendRequest = async () => {
-  //   await axios.post("http://localhost:8081/admit", {
-  //     hospital: inputs.hospital,
-  //     date: inputs.date,
-  //     fullname: inputs.fullname,
-  //     dob: inputs.dob,
-  //     gender: inputs.gender,
-  //     phone: inputs.phone,
-  //     address: inputs.address,
-  //     guardian: inputs.guardian,
-  //     relationship: inputs.relationship,
-  //     contact: inputs.contact,
-  //     admitID: inputs.admitID,
-  //     medications: inputs.medications,
-  //     past: inputs.past,
-  //     symptoms: inputs.symptoms,
-  //     prescription: inputs.prescription,
-  //     nic: inputs.nic, // Send NIC field
-  //   });
-  // };
   const sendRequest = async () => {
     const formData = new FormData();
     for (const key in inputs) {
@@ -205,7 +184,12 @@ function AddAdmit() {
                             name="fullname"
                             className="form_input_colum"
                             value={inputs.fullname}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                              const re = /^[A-Za-z\s]*$/;
+                              if (re.test(e.target.value)) {
+                                handleChange(e);
+                              }
+                            }}
                             required
                           />
                         </div>
@@ -247,13 +231,20 @@ function AddAdmit() {
                           <label htmlFor="phone">Phone:</label>
                           <br />
                           <input
-                            type="number"
+                            type="text"
                             id="phone"
-                            pattern="[0-9]{10}"
                             name="phone"
-                            className="form_input_colum"
+                            className="form-input"
                             value={inputs.phone}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                              const re = /^[0-9\b]{0,10}$/;
+                              if (re.test(e.target.value)) {
+                                handleChange(e);
+                              }
+                            }}
+                            maxLength="10"
+                            pattern="[0-9]{10}"
+                            title="Please enter exactly 10 digits."
                             required
                           />
                         </div>
@@ -306,14 +297,22 @@ function AddAdmit() {
                       <div className="form-group">
                         <label htmlFor="contact">Emergency Contact:</label>
                         <br />
+
                         <input
-                          type="number"
+                          type="text"
                           id="contact"
-                          pattern="[0-9]{10}"
                           name="contact"
-                          className="form_input_colum"
+                          className="form-input"
                           value={inputs.contact}
-                          onChange={handleChange}
+                          onChange={(e) => {
+                            const re = /^[0-9\b]{0,10}$/;
+                            if (re.test(e.target.value)) {
+                              handleChange(e);
+                            }
+                          }}
+                          maxLength="10"
+                          pattern="[0-9]{10}"
+                          title="Please enter exactly 10 digits."
                           required
                         />
                       </div>

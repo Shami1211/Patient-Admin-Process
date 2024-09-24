@@ -108,7 +108,12 @@ function UpdateData() {
                   placeholder="Full Name"
                   className="form_input_colum_update"
                   value={inputs.fullname || ""}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const re = /^[A-Za-z\s]*$/;
+                    if (re.test(e.target.value)) {
+                      handleChange(e);
+                    }
+                  }}
                   required
                 />
               </div>
@@ -147,12 +152,20 @@ function UpdateData() {
                 <label className="admit_card_label">Phone:</label>
                 <br />
                 <input
-                  type="number"
+                  type="text"
+                  id="phone"
                   name="phone"
-                  placeholder="Phone"
-                  className="form_input_colum_update"
-                  value={inputs.phone || ""}
-                  onChange={handleChange}
+                  className="form-input"
+                  value={inputs.phone}
+                  onChange={(e) => {
+                    const re = /^[0-9\b]{0,10}$/;
+                    if (re.test(e.target.value)) {
+                      handleChange(e);
+                    }
+                  }}
+                  maxLength="10"
+                  pattern="[0-9]{10}"
+                  title="Please enter exactly 10 digits."
                   required
                 />
               </div>
@@ -206,11 +219,19 @@ function UpdateData() {
                 <br />
                 <input
                   type="text"
+                  id="contact"
                   name="contact"
-                  placeholder="Contact"
-                  className="form_input_colum_update"
-                  value={inputs.contact || ""}
-                  onChange={handleChange}
+                  className="form-input"
+                  value={inputs.contact}
+                  onChange={(e) => {
+                    const re = /^[0-9\b]{0,10}$/;
+                    if (re.test(e.target.value)) {
+                      handleChange(e);
+                    }
+                  }}
+                  maxLength="10"
+                  pattern="[0-9]{10}"
+                  title="Please enter exactly 10 digits."
                   required
                 />
               </div>
